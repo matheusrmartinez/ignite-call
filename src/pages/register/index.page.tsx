@@ -8,6 +8,7 @@ import router, { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { api } from "@/lib/axios";
 import { Routes } from "@/enums/routes";
+import { AxiosError } from "axios";
 
 export default function Register() {
   const {
@@ -46,8 +47,15 @@ export default function Register() {
         name: data.name,
         username: data.username,
       });
-    } catch (error) {
-      console.log(error);
+    } catch (err: unknown) {
+      const error = err as AxiosError<Error>;
+
+      if (error?.response?.data?.name) {
+        alert(error.response.data.name);
+        return;
+      }
+
+      console.error(err);
     }
   };
 
