@@ -1,17 +1,25 @@
-import { Button, Heading, MultiStep, Text, TextInput } from "@ignite-ui/react";
-import { ArrowRight } from "phosphor-react";
+import { Routes } from "@/enums/routes";
+import { useAuth } from "@/hooks/useAuth";
+import { validateAuth } from "@/utils/authValidation";
+import { Button, Heading, MultiStep, Text } from "@ignite-ui/react";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/router";
+import { ArrowRight, Check } from "phosphor-react";
 import { Container, Header } from "../styles";
 import { AuthError, ConnectBox, ConnectItem } from "./styles";
-import { useSession, signIn, signOut } from "next-auth/react";
-import { useRouter } from "next/router";
-import { validateAuth } from "@/utils/authValidation";
 
 export default function ConnectCalendar() {
-  const { data: session } = useSession();
   const router = useRouter();
+  const { isSignedIn } = useAuth();
+  const authValidationResult = validateAuth(router.query);
 
-  const authValidation = validateAuth(router.query);
-  // const handleRegister = async (data: RegisterFormData) => {};
+  if (isSignedIn && authValidationResult.hasError) {
+    router.replace(Routes.connectCalendar, undefined, { shallow: true });
+  }
+
+  const handleConnectCalendar = async () => {
+    await signIn("google");
+  };
 
   return (
     <Container>
@@ -26,22 +34,30 @@ export default function ConnectCalendar() {
       <ConnectBox>
         <ConnectItem>
           <Text>Google Calendar</Text>
-          <Button
-            variant="secondary"
-            size="sm"
-            type="submit"
-            onClick={() => signIn("google")}
-          >
-            Conectar
-            <ArrowRight />
-          </Button>
+          {isSignedIn ? (
+            <Button size="sm" disabled>
+              Conectado
+              <Check />
+            </Button>
+          ) : (
+            <Button
+              disabled={isSignedIn}
+              variant="secondary"
+              size="sm"
+              type="submit"
+              onClick={handleConnectCalendar}
+            >
+              Conectar
+              <ArrowRight />
+            </Button>
+          )}
         </ConnectItem>
         <AuthError size="sm">
-          {authValidation.hasError ? authValidation.message : null}
+          {authValidationResult.hasError && authValidationResult.message}
         </AuthError>
-        <Button type="submit">
+        <Button type="submit" disabled={!isSignedIn}>
           Próximo passo
-          <ArrowRight />
+            <ArrowRight />
         </Button>
       </ConnectBox>
     </Container>

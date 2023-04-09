@@ -9,8 +9,6 @@ const scopes = {
   calendar: AuthScope.calendar,
 };
 
-const authorizationScope = Object.values(scopes).join(" ");
-
 export const authOptions: NextAuthOptions = {
   providers: [
     GoogleProvider({
@@ -18,7 +16,7 @@ export const authOptions: NextAuthOptions = {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? "",
       authorization: {
         params: {
-          scope: authorizationScope,
+          scope: Object.values(scopes).join(" "),
         },
       },
     }),

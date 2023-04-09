@@ -64,7 +64,7 @@ export default function Register() {
   useEffect(() => {
     if (userName) {
       setValue("username", String(userName));
-      router.replace("/register", undefined, { shallow: true });
+      router.replace(Routes.register, undefined, { shallow: true });
     }
   }, [userName, setValue]);
 

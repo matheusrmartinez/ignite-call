@@ -1,10 +1,6 @@
 import { Errors } from "@/enums/errors";
+import { ValidationResult } from "@/types/validationResult";
 import { ParsedUrlQuery } from "querystring";
-
-type ValidationResult = {
-  message?: string;
-  hasError?: boolean;
-};
 
 export function validateAuth(url: ParsedUrlQuery): ValidationResult {
   let validationResult = permissionError(url);
