@@ -21,6 +21,10 @@ import {
   IntervalsContainer,
 } from "./styles";
 import { convertTimeStringToMinutes } from "@/utils/convert-time-string-to-minutes";
+import { api } from "@/lib/axios";
+import { Routes } from "@/enums/routes";
+import { AxiosError } from "axios";
+import router from "next/router";
 
 const timeIntervalsFormSchema = z.object({
   intervals: z
@@ -90,7 +94,24 @@ export default function TimerIntervals() {
   });
 
   const handleSetTimeIntervals = async (data: any) => {
-    const formData = data as TimeIntervalsFormOutput;
+    const { intervals } = data as TimeIntervalsFormOutput;
+
+    try {
+      await api.post(Routes.apiUsersTimeIntervals, {
+        intervals,
+      });
+
+      await router.push(Routes.updateProfile);
+    } catch (err: unknown) {
+      const error = err as AxiosError<Error>;
+
+      if (error?.response?.data?.name) {
+        alert(error.response.data.name);
+        return;
+      }
+
+      console.error(err);
+    }
   };
 
   const weekDays = getWeekDays();
