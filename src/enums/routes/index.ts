@@ -1,6 +1,11 @@
 export enum Routes {
-  home = "/home",
+  home = "/",
   register = "/register",
   users = "/users",
-  connectCalendar = "/register/connect-calendar",
+  apiUsersTimeIntervals = `${users}/time-intervals`,
+  registerUsersTimeIntervals = `${register}/time-intervals`,
+  connectCalendar = `${register}/connect-calendar`,
+  updateProfile = `${register}/update-profile`,
+  apiUpdateProfile = `${users}/profile`,
+  schedule = "schedule"
 }
