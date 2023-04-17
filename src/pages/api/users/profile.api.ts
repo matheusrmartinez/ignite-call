@@ -27,7 +27,7 @@ export default async function handler(
 
   const { bio }: ProfileProps = req.body || {};
 
-  prisma.user.update({
+  await prisma.user.update({
     where: {
       id: session.user.id,
     },
