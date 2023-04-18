@@ -1,5 +1,5 @@
-import { buildNextAuthOptions } from "@/pages/api/auth/[...nextauth].api";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { buildNextAuthOptions } from '@/pages/api/auth/[...nextauth].api';
+import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Avatar,
   Button,
@@ -7,20 +7,20 @@ import {
   MultiStep,
   Text,
   TextArea,
-} from "@ignite-ui/react";
-import { GetServerSideProps } from "next";
-import { getServerSession } from "next-auth/next";
-import { useSession } from "next-auth/react";
-import { ArrowRight } from "phosphor-react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { Container, Header } from "../styles";
-import { FormAnnotation, ProfileBox } from "./styles";
-import { useAuth } from "@/hooks/useAuth";
-import { api } from "@/lib/axios";
-import { Routes } from "@/enums/routes";
-import router from "next/router";
-import { AxiosError } from "axios";
+} from '@ignite-ui/react';
+import { GetServerSideProps } from 'next';
+import { getServerSession } from 'next-auth/next';
+import { useSession } from 'next-auth/react';
+import { ArrowRight } from 'phosphor-react';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { Container, Header } from '../styles';
+import { FormAnnotation, ProfileBox } from './styles';
+import { useAuth } from '@/hooks/useAuth';
+import { api } from '@/lib/axios';
+import { Routes } from '@/enums/routes';
+import router from 'next/router';
+import { AxiosError } from 'axios';
 
 export default function UpdateProfile() {
   const updateProfileSchema = z.object({
@@ -76,7 +76,7 @@ export default function UpdateProfile() {
         </label>
         <label>
           <Text size="sm">Sobre você</Text>
-          <TextArea placeholder="Seu nome" {...register("bio")} />
+          <TextArea placeholder="Seu nome" {...register('bio')} />
           <FormAnnotation size="sm">
             Fale um pouco sobre você. Isto será exibido em sua página pessoal.
           </FormAnnotation>

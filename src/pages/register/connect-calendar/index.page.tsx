@@ -1,12 +1,12 @@
-import { Routes } from "@/enums/routes";
-import { useAuth } from "@/hooks/useAuth";
-import { validateAuth } from "@/utils/authValidation";
-import { Button, Heading, MultiStep, Text } from "@ignite-ui/react";
-import { signIn } from "next-auth/react";
-import { useRouter } from "next/router";
-import { ArrowRight, Check } from "phosphor-react";
-import { Container, Header } from "../styles";
-import { AuthError, ConnectBox, ConnectItem } from "./styles";
+import { Routes } from '@/enums/routes';
+import { useAuth } from '@/hooks/useAuth';
+import { validateAuth } from '@/utils/authValidation';
+import { Button, Heading, MultiStep, Text } from '@ignite-ui/react';
+import { signIn } from 'next-auth/react';
+import { useRouter } from 'next/router';
+import { ArrowRight, Check } from 'phosphor-react';
+import { Container, Header } from '../styles';
+import { AuthError, ConnectBox, ConnectItem } from './styles';
 
 export default function ConnectCalendar() {
   const router = useRouter();
@@ -18,7 +18,7 @@ export default function ConnectCalendar() {
   }
 
   const handleConnectCalendar = async () => {
-    await signIn("google");
+    await signIn('google');
   };
 
   return (

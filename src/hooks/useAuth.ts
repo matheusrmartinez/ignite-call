@@ -1,9 +1,9 @@
-import type { Session } from "next-auth";
-import { SessionContextValue, useSession } from "next-auth/react";
-import { useMemo } from "react";
+import type { Session } from 'next-auth';
+import { SessionContextValue, useSession } from 'next-auth/react';
+import { useMemo } from 'react';
 
 enum SessionStatus {
-  authenticated = "authenticated",
+  authenticated = 'authenticated',
 }
 
 export const useAuth = () => {

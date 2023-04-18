@@ -1,14 +1,14 @@
-import { Button, Heading, MultiStep, Text, TextInput } from "@ignite-ui/react";
-import { Header, Container, Form, FormError } from "./styles";
-import { ArrowRight } from "phosphor-react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import router, { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import { api } from "@/lib/axios";
-import { Routes } from "@/enums/routes";
-import { AxiosError } from "axios";
+import { Button, Heading, MultiStep, Text, TextInput } from '@ignite-ui/react';
+import { Header, Container, Form, FormError } from './styles';
+import { ArrowRight } from 'phosphor-react';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import router, { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+import { api } from '@/lib/axios';
+import { Routes } from '@/enums/routes';
+import { AxiosError } from 'axios';
 
 export default function Register() {
   const {
@@ -20,14 +20,14 @@ export default function Register() {
   const registerFormSchema = z.object({
     username: z
       .string()
-      .min(3, { message: "O usuário precisa ter pelo menos 3 letras" })
+      .min(3, { message: 'O usuário precisa ter pelo menos 3 letras' })
       .regex(/^([a-z\\\\-]+)$/i, {
-        message: "O usuário pode ter apenas números e hífens",
+        message: 'O usuário pode ter apenas números e hífens',
       })
       .transform((username) => username.toLowerCase()),
     name: z
       .string()
-      .min(3, { message: "O nome precisa ter pelo menos 3 letras" }),
+      .min(3, { message: 'O nome precisa ter pelo menos 3 letras' }),
   });
 
   const {
@@ -48,7 +48,7 @@ export default function Register() {
         username: data.username,
       });
 
-      await router.push(Routes.connectCalendar)
+      await router.push(Routes.connectCalendar);
     } catch (err: unknown) {
       const error = err as AxiosError<Error>;
 
@@ -63,7 +63,7 @@ export default function Register() {
 
   useEffect(() => {
     if (userName) {
-      setValue("username", String(userName));
+      setValue('username', String(userName));
       router.replace(Routes.register, undefined, { shallow: true });
     }
   }, [userName, setValue]);
@@ -85,7 +85,7 @@ export default function Register() {
             value={username}
             prefix="ignite.com/"
             placeholder="seu-usuário"
-            {...register("username")}
+            {...register('username')}
           />
           {errors.username ? (
             <FormError size="sm">{errors.username.message}</FormError>
@@ -93,7 +93,7 @@ export default function Register() {
         </label>
         <label>
           <Text size="sm">Nome completo</Text>
-          <TextInput placeholder="Seu nome" {...register("name")}></TextInput>
+          <TextInput placeholder="Seu nome" {...register('name')}></TextInput>
           {errors.name ? (
             <FormError size="sm">{errors.name.message}</FormError>
           ) : null}

@@ -37,19 +37,17 @@ export const Calendar = () => {
     }).map((_, i) => {
       return currentDate.set('date', i + 1);
     });
-    return daysInMonthArray;
-  }, [currentDate]);
-
-  const firstWeekDay = currentDate.get('day');
-  const previousMonthFillArray = Array.from({
-    length: firstWeekDay,
-  })
-    .map((_, i) => {
-      return currentDate.subtract(i + 1, 'day');
+    const firstWeekDay = currentDate.get('day');
+    const previousMonthFillArray = Array.from({
+      length: firstWeekDay,
     })
-    .reverse();
+      .map((_, i) => {
+        return currentDate.subtract(i + 1, 'day');
+      })
+      .reverse();
 
-  console.log(previousMonthFillArray, 'calendarWeeks');
+    return [...previousMonthFillArray, ...daysInMonthArray];
+  }, [currentDate]);
 
   return (
     <CalendarContainer>

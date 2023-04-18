@@ -1,9 +1,9 @@
-import { AuthScope, Scope } from "@/enums/authScopes";
-import NextAuth, { NextAuthOptions } from "next-auth";
-import GoogleProvider, { GoogleProfile } from "next-auth/providers/google";
-import { Routes } from "@/enums/routes";
-import { PrismaAdapter } from "@/lib/auth/prisma-adapter";
-import { NextApiRequest, NextApiResponse, NextPageContext } from "next";
+import { AuthScope, Scope } from '@/enums/authScopes';
+import NextAuth, { NextAuthOptions } from 'next-auth';
+import GoogleProvider, { GoogleProfile } from 'next-auth/providers/google';
+import { Routes } from '@/enums/routes';
+import { PrismaAdapter } from '@/lib/auth/prisma-adapter';
+import { NextApiRequest, NextApiResponse, NextPageContext } from 'next';
 
 const scopes = {
   email: AuthScope.email,
@@ -12,25 +12,25 @@ const scopes = {
 };
 
 export const buildNextAuthOptions = (
-  req: NextApiRequest | NextPageContext["req"],
-  res: NextApiResponse | NextPageContext["res"]
+  req: NextApiRequest | NextPageContext['req'],
+  res: NextApiResponse | NextPageContext['res']
 ): NextAuthOptions => {
   return {
     adapter: PrismaAdapter(req, res),
     providers: [
       GoogleProvider({
-        clientId: process.env.GOOGLE_CLIENT_ID ?? "",
-        clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? "",
+        clientId: process.env.GOOGLE_CLIENT_ID ?? '',
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? '',
         authorization: {
           params: {
-            scope: Object.values(scopes).join(" "),
+            scope: Object.values(scopes).join(' '),
           },
         },
         profile(profile: GoogleProfile) {
           return {
             id: profile.sub,
             name: profile.name,
-            username: "",
+            username: '',
             email: profile.email,
             avatar_url: profile.picture,
           };

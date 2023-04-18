@@ -1,7 +1,7 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import { getServerSession } from "next-auth/next";
-import { buildNextAuthOptions } from "../auth/[...nextauth].api";
-import { prisma } from "@/lib/prisma";
+import { NextApiRequest, NextApiResponse } from 'next';
+import { getServerSession } from 'next-auth/next';
+import { buildNextAuthOptions } from '../auth/[...nextauth].api';
+import { prisma } from '@/lib/prisma';
 
 interface ProfileProps {
   bio: string;
@@ -11,7 +11,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  if (req.method !== "PUT") {
+  if (req.method !== 'PUT') {
     res.status(405).end();
   }
 
