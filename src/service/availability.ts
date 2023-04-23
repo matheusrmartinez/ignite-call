@@ -1,10 +1,9 @@
-import { Availability } from '@/interfaces/availability';
-import { api } from '@/lib/axios';
-import { useQuery } from '@tanstack/react-query';
-import dayjs from 'dayjs';
+import { Availability } from '@/interfaces/availability'
+import { api } from '@/lib/axios'
+import dayjs from 'dayjs'
 
 interface AvailabilityProps {
-  username: string;
+  username: string
   selectedDateWithoutTime: string | null
 }
 
@@ -19,11 +18,11 @@ export const getAvailability = async ({
       },
     })
     .then(({ data }) => {
-      return data;
+      return data
     })
     .catch(() => {
-      return availability;
-    });
+      return availability
+    })
 
-  return availability;
-};
+  return availability
+}
