@@ -58,9 +58,11 @@ export const Calendar = ({ selectedDate, onDateSelected }: CalendarProps) => {
     async () => {
       const blockedDates = await getBlockedDates({
         year: currentDate.get('year'),
-        month: currentDate.get('month'),
+        month: currentDate.get('month') + 1,
         username: String(username),
       })
+
+      console.log(blockedDates, 'blockedDates')
 
       return blockedDates
     },
@@ -105,8 +107,9 @@ export const Calendar = ({ selectedDate, onDateSelected }: CalendarProps) => {
         return {
           date,
           disabled:
-            blockedDates.blockedWeekDays.includes(date.day()) ||
-            date.endOf('day').isBefore(new Date()),
+            blockedDates.blockedWeekDays.includes(date.get('day')) ||
+            date.endOf('day').isBefore(new Date()) ||
+            blockedDates.blockedDates.includes(date.get('date')),
         }
       }),
       ...nextMonthFillArray.map((date) => {

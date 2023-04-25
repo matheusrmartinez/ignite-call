@@ -19,9 +19,7 @@ export const getBlockedDates = async ({
         month,
       },
     })
-    .then(({ data }) => {
-      return data
-    })
+    .then(({ data }) => data)
     .catch(() => {
       return blockedDates
     })
