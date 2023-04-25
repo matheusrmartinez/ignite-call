@@ -9,7 +9,7 @@ export const ScheduleForm = () => {
   if (selectedDateTime) {
     return (
       <ConfirmStep
-        schedulingTime={selectedDateTime}
+        schedulingDate={selectedDateTime}
         onCancelConfirmation={handleClearSelectedDateTime}
       />
     )
