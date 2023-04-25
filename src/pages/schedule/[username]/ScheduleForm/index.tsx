@@ -1,6 +1,19 @@
-import { CalendarStep } from './CalendarStep';
-import { ConfirmStep } from './ConfirmStep';
+import { useState } from 'react'
+import { CalendarStep } from './CalendarStep'
+import { ConfirmStep } from './ConfirmStep'
 
 export const ScheduleForm = () => {
-  return <CalendarStep />;
-};
+  const [selectedDateTime, setSelectedDateTime] = useState<Date | null>()
+  const handleClearSelectedDateTime = () => setSelectedDateTime(null)
+
+  if (selectedDateTime) {
+    return (
+      <ConfirmStep
+        schedulingTime={selectedDateTime}
+        onCancelConfirmation={handleClearSelectedDateTime}
+      />
+    )
+  }
+
+  return <CalendarStep onSelectDateTime={setSelectedDateTime} />
+}

@@ -1,9 +1,10 @@
-import { Button, Text, TextArea, TextInput } from '@ignite-ui/react';
-import { ConfirmForm, FormActions, FormError, FormHeader } from './styles';
-import { CalendarBlank, Clock } from 'phosphor-react';
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
+import { Button, Text, TextArea, TextInput } from '@ignite-ui/react'
+import { ConfirmForm, FormActions, FormError, FormHeader } from './styles'
+import { CalendarBlank, Clock } from 'phosphor-react'
+import { z } from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
+import dayjs from 'dayjs'
 
 const confirmFormSchema = z.object({
   name: z
@@ -11,12 +12,20 @@ const confirmFormSchema = z.object({
     .min(3, { message: 'O nome precisa ter no mínimo 3 caracteres' }),
   email: z.string().email({ message: 'Digite um e-mail válido' }),
   remarks: z.string().nullable(),
-});
+})
 
-type ConfirmFormData = z.infer<typeof confirmFormSchema>;
+type ConfirmFormData = z.infer<typeof confirmFormSchema>
 
-export const ConfirmStep = () => {
-  const handleConfirmScheduling = (data: ConfirmFormData) => {};
+interface ConfirmStepProps {
+  schedulingTime: Date
+  onCancelConfirmation: () => void
+}
+
+export const ConfirmStep = ({
+  schedulingTime,
+  onCancelConfirmation,
+}: ConfirmStepProps) => {
+  const handleConfirmScheduling = (data: ConfirmFormData) => {}
 
   const {
     register,
@@ -24,18 +33,21 @@ export const ConfirmStep = () => {
     formState: { isSubmitting, errors },
   } = useForm<ConfirmFormData>({
     resolver: zodResolver(confirmFormSchema),
-  });
+  })
+
+  const describedDate = dayjs(schedulingTime).format('DD [ de ]MMMM[ de ]YYYY')
+  const describedTime = dayjs(schedulingTime).format('HH:mm[h]')
 
   return (
     <ConfirmForm as="form" onSubmit={handleSubmit(handleConfirmScheduling)}>
       <FormHeader>
         <Text>
           <CalendarBlank />
-          18 de abril de 2023
+          {describedDate}
         </Text>
         <Text>
           <Clock />
-          19:39h
+          {describedTime}
         </Text>
       </FormHeader>
       <label>
@@ -61,7 +73,7 @@ export const ConfirmStep = () => {
         <TextArea {...register('remarks')} />
       </label>
       <FormActions>
-        <Button variant="tertiary" type="button">
+        <Button onClick={onCancelConfirmation} variant="tertiary" type="button">
           Cancelar
         </Button>
         <Button disabled={isSubmitting} type="submit">
@@ -69,5 +81,5 @@ export const ConfirmStep = () => {
         </Button>
       </FormActions>
     </ConfirmForm>
-  );
-};
+  )
+}
