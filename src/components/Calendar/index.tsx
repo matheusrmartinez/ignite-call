@@ -61,9 +61,6 @@ export const Calendar = ({ selectedDate, onDateSelected }: CalendarProps) => {
         month: currentDate.get('month') + 1,
         username: String(username),
       })
-
-      console.log(blockedDates, 'blockedDates')
-
       return blockedDates
     },
   )

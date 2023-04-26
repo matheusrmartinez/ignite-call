@@ -20,12 +20,12 @@ type ConfirmFormData = z.infer<typeof confirmFormSchema>
 
 interface ConfirmStepProps {
   schedulingDate: Date
-  onCancelConfirmation: () => void
+  onCancelOrConfirmClick: () => void
 }
 
 export const ConfirmStep = ({
   schedulingDate,
-  onCancelConfirmation,
+  onCancelOrConfirmClick,
 }: ConfirmStepProps) => {
   const router = useRouter()
   const username = String(router.query.username)
@@ -40,7 +40,7 @@ export const ConfirmStep = ({
       date: schedulingDate,
     })
 
-    onCancelConfirmation()
+    onCancelOrConfirmClick()
   }
 
   const {
@@ -89,7 +89,11 @@ export const ConfirmStep = ({
         <TextArea {...register('remarks')} />
       </label>
       <FormActions>
-        <Button onClick={onCancelConfirmation} variant="tertiary" type="button">
+        <Button
+          onClick={onCancelOrConfirmClick}
+          variant="tertiary"
+          type="button"
+        >
           Cancelar
         </Button>
         <Button disabled={isSubmitting} type="submit">
