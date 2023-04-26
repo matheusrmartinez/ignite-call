@@ -9,6 +9,7 @@ import { useRouter } from 'next/router'
 import { api } from '@/lib/axios'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import { useState } from 'react'
 
 const confirmFormSchema = z.object({
   name: z
@@ -31,9 +32,11 @@ export const ConfirmStep = ({
 }: ConfirmStepProps) => {
   const router = useRouter()
   const username = String(router.query.username)
+  const [isFetchingData, setIsFetchingData] = useState<boolean>(false)
 
   const handleConfirmScheduling = async (data: ConfirmFormData) => {
     const { name, email, remarks } = data
+    setIsFetchingData(true)
 
     try {
       await setTimeout(() => {
@@ -44,6 +47,7 @@ export const ConfirmStep = ({
           date: schedulingDate,
         })
         onCancelOrConfirmClick()
+        setIsFetchingData(false)
       }, 4000)
     } catch (error: unknown) {
       console.error(`Failed to create a new schedule. ${error}`)
@@ -53,13 +57,16 @@ export const ConfirmStep = ({
   const {
     register,
     handleSubmit,
-    formState: { isSubmitting, errors },
+    formState: { isSubmitting, errors, isValid, isSubmitted },
   } = useForm<ConfirmFormData>({
     resolver: zodResolver(confirmFormSchema),
   })
 
   const handleNotify = () => {
-    if (!(errors?.name || errors.email || errors.remarks)) {
+    if (
+      !(errors?.name || errors?.email || errors?.remarks) &&
+      (isSubmitted || isValid)
+    ) {
       toast.success('Agendamento realizado com sucesso!', {
         closeOnClick: true,
         pauseOnHover: false,
@@ -113,11 +120,12 @@ export const ConfirmStep = ({
           onClick={onCancelOrConfirmClick}
           variant="tertiary"
           type="button"
+          disabled={isFetchingData}
         >
           Cancelar
         </Button>
         <Button
-          disabled={isSubmitting}
+          disabled={isSubmitting || isFetchingData}
           onClick={() => handleNotify()}
           type="submit"
         >
