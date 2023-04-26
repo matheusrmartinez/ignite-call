@@ -7,6 +7,8 @@ import { useForm } from 'react-hook-form'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
 import { api } from '@/lib/axios'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 const confirmFormSchema = z.object({
   name: z
@@ -33,14 +35,19 @@ export const ConfirmStep = ({
   const handleConfirmScheduling = async (data: ConfirmFormData) => {
     const { name, email, remarks } = data
 
-    await api.post(`/users/${username}/schedule`, {
-      name,
-      email,
-      remarks,
-      date: schedulingDate,
-    })
-
-    onCancelOrConfirmClick()
+    try {
+      await setTimeout(() => {
+        api.post(`/users/${username}/schedule`, {
+          name,
+          email,
+          remarks,
+          date: schedulingDate,
+        })
+        onCancelOrConfirmClick()
+      }, 4000)
+    } catch (error: unknown) {
+      console.error(`Failed to create a new schedule. ${error}`)
+    }
   }
 
   const {
@@ -50,6 +57,19 @@ export const ConfirmStep = ({
   } = useForm<ConfirmFormData>({
     resolver: zodResolver(confirmFormSchema),
   })
+
+  const handleNotify = () => {
+    if (!(errors?.name || errors.email || errors.remarks)) {
+      toast.success('Agendamento realizado com sucesso!', {
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'dark',
+        autoClose: 3000,
+      })
+    }
+  }
 
   const describedDate = dayjs(schedulingDate).format('DD [ de ]MMMM[ de ]YYYY')
   const describedTime = dayjs(schedulingDate).format('HH:mm[h]')
@@ -96,10 +116,15 @@ export const ConfirmStep = ({
         >
           Cancelar
         </Button>
-        <Button disabled={isSubmitting} type="submit">
+        <Button
+          disabled={isSubmitting}
+          onClick={() => handleNotify()}
+          type="submit"
+        >
           Confirmar
         </Button>
       </FormActions>
+      <ToastContainer />
     </ConfirmForm>
   )
 }
