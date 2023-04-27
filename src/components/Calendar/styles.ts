@@ -1,17 +1,17 @@
-import { Text, styled } from '@ignite-ui/react';
+import { Text, styled } from '@ignite-ui/react'
 
 export const CalendarContainer = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   gap: '$6',
   padding: '$6',
-});
+})
 
 export const CalendarHeader = styled('div', {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-between',
-});
+})
 
 export const CalendarTitle = styled(Text, {
   fontWeight: '$medium',
@@ -20,7 +20,7 @@ export const CalendarTitle = styled(Text, {
   span: {
     color: '$gray200',
   },
-});
+})
 
 export const CalendarActions = styled('div', {
   display: 'flex',
@@ -46,7 +46,7 @@ export const CalendarActions = styled('div', {
       boxShadow: '0 0 0 2px $colors$gray100',
     },
   },
-});
+})
 
 export const CalendarBody = styled('table', {
   width: '100%',
@@ -70,7 +70,7 @@ export const CalendarBody = styled('table', {
   'tbody td': {
     boxSizing: 'border-box',
   },
-});
+})
 
 export const CalendarDay = styled('button', {
   all: 'unset',
@@ -94,4 +94,4 @@ export const CalendarDay = styled('button', {
   '&:focus': {
     boxShadow: '0 0 0 2px $colors$gray100',
   },
-});
+})

@@ -1,31 +1,31 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import { getServerSession } from 'next-auth/next';
-import { buildNextAuthOptions } from '../auth/[...nextauth].api';
-import { prisma } from '@/lib/prisma';
+import { NextApiRequest, NextApiResponse } from 'next'
+import { getServerSession } from 'next-auth/next'
+import { buildNextAuthOptions } from '../auth/[...nextauth].api'
+import { prisma } from '@/lib/prisma'
 
 interface ProfileProps {
-  bio: string;
+  bio: string
 }
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ) {
   if (req.method !== 'PUT') {
-    res.status(405).end();
+    res.status(405).end()
   }
 
   const session = await getServerSession(
     req,
     res,
-    buildNextAuthOptions(req, res)
-  );
+    buildNextAuthOptions(req, res),
+  )
 
   if (!session) {
-    return res.status(401).end();
+    return res.status(401).end()
   }
 
-  const { bio }: ProfileProps = req.body || {};
+  const { bio }: ProfileProps = req.body || {}
 
   await prisma.user.update({
     where: {
@@ -34,7 +34,7 @@ export default async function handler(
     data: {
       bio,
     },
-  });
+  })
 
-  return res.status(204).end();
+  return res.status(204).end()
 }

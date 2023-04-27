@@ -6,20 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "format": "prettier --write \"./**/*.{js,ts,tsx}\"",
-    "format-check": "prettier --check \"./**/*.{js,ts,tsx,jsx}\"",
     "type-check": "tsc --pretty --noEmit --incremental false",
-    "lint": "eslint . --ext ts --ext tsx --ext js",
-    "prepare": "husky install",
-    "pretty-quick": "npx -p prettier@latest -p pretty-quick pretty-quick --staged",
-    "prettier-check": "prettier-check src/**/*.ts"
-  },
-  "lint-staged": {
-    "*.(js|ts|jsx|tsx)": [
-      "prettier --write",
-      "eslint --fix"
-    ],
-    "*.{js,ts,tsx}": "prettier --write"
+    "lint": "next lint",
+    "prettier": "prettier --write ."
   },
   "dependencies": {
     "@hookform/resolvers": "^3.0.1",
@@ -49,9 +38,9 @@
   "devDependencies": {
     "@rocketseat/eslint-config": "^1.2.0",
     "@types/cookie": "^0.5.1",
-    "husky": "^8.0.0",
+    "eslint-config-prettier": "^8.8.0",
     "lint-staged": "^13.2.1",
-    "prettier": "^2.8.8",
+    "prettier": "2.8.8",
     "prisma": "^4.12.0"
   }
 }

@@ -1,4 +1,4 @@
-import { styled, Text, Box } from '@ignite-ui/react';
+import { styled, Text, Box } from '@ignite-ui/react'
 
 export const ConfirmForm = styled(Box, {
   maxWidth: 540,
@@ -12,7 +12,7 @@ export const ConfirmForm = styled(Box, {
     flexDirection: 'column',
     gap: '$2',
   },
-});
+})
 export const FormHeader = styled('div', {
   display: 'flex',
   alignItems: 'center',
@@ -33,13 +33,13 @@ export const FormHeader = styled('div', {
       height: '4%',
     },
   },
-});
+})
 export const FormError = styled(Text, {
   color: '#f75a68',
-});
+})
 export const FormActions = styled('div', {
   display: 'flex',
   justifyContent: 'flex-end',
   gap: '$2',
   marginTop: '$2',
-});
+})

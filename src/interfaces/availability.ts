@@ -1,4 +1,4 @@
 export interface Availability {
-  availableTimes: number[];
-  possibleTimes: number[];
+  availableTimes: number[]
+  possibleTimes: number[]
 }
