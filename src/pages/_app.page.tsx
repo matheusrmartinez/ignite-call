@@ -24,7 +24,7 @@ export default function App({
         }}
       />
       <SessionProvider session={session}>
-        <Component {...pageProps} />;
+        <Component {...pageProps} />
       </SessionProvider>
     </QueryClientProvider>
   )

@@ -7,6 +7,11 @@ export const Container = styled('div', {
   marginLeft: 'auto',
   maxWidth: 'calc(100vw - (100vw - 1160px) / 2)',
   height: '100vh',
+
+  '@media (max-width:1440px)': {
+    flexDirection: 'column',
+    justifyContent: 'center',
+  },
 })
 
 export const Hero = styled('div', {
@@ -14,7 +19,7 @@ export const Hero = styled('div', {
   padding: '0 $10',
 
   [`> ${Heading}`]: {
-    '@media (max-width: 600px)': {
+    '@media (max-width: 815px)': {
       fontSize: '$6xl',
     },
   },
@@ -26,10 +31,10 @@ export const Hero = styled('div', {
 })
 
 export const Preview = styled('div', {
-  paddingRight: '$8',
+  paddingY: '$8',
   overflow: 'hidden',
 
-  '@media(max-width: 600px)': {
+  '@media(max-width: 815px)': {
     display: 'none',
   },
 })

@@ -42,8 +42,8 @@ model Account {
   user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   @@unique([provider, provider_account_id])
-  @@map("accounts")
   @@index([user_id])
+  @@map("accounts")
 }
 
 model Session {
@@ -53,8 +53,8 @@ model Session {
   expires       DateTime
   user          User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
-  @@map("sessions")
   @@index([user_id])
+  @@map("sessions")
 }
 
 model UserTimeInterval {
@@ -66,8 +66,8 @@ model UserTimeInterval {
   user    User   @relation(fields: [user_id], references: [id])
   user_id String
 
-  @@map("user_time_intervals")
   @@index([user_id])
+  @@map("user_time_intervals")
 }
 
 model Scheduling {
@@ -82,6 +82,6 @@ model Scheduling {
 
   user_id String @map("user_id")
 
-  @@map("schedulings")
   @@index([user_id])
+  @@map("schedulings")
 }

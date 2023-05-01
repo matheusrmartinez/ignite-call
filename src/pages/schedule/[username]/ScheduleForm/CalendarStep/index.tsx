@@ -7,11 +7,17 @@ import { useRouter } from 'next/router'
 import { useState } from 'react'
 import {
   Container,
+  HeaderContainer,
   TimePicker,
   TimePickerHeader,
+  HeaderModalContent,
   TimePickerItem,
   TimePickerList,
+  TimePickerModal,
 } from './styles'
+import { useWindowSize } from '@/hooks/useWindowSize'
+import { Modal } from '@/components/Modal'
+import { X } from 'phosphor-react'
 
 interface CalendarStepProps {
   onSelectDateTime: (date: Date) => void
@@ -59,26 +65,64 @@ export const CalendarStep = ({ onSelectDateTime }: CalendarStepProps) => {
     onSelectDateTime(dateTime)
   }
 
+  const { width } = useWindowSize()
+
+  const TimePickerComponent = () => {
+    return (
+      <TimePicker>
+        <TimePickerHeader>
+          {weekDay} <span>{describedDate}</span>
+        </TimePickerHeader>
+        <TimePickerList>
+          {availability?.possibleTimes.map((hour) => (
+            <TimePickerItem
+              key={hour}
+              onClick={() => handleSelectTime(hour)}
+              disabled={!availability.availableTimes.includes(hour)}
+            >
+              {String(hour).padStart(2, '0')}:00h
+            </TimePickerItem>
+          ))}
+        </TimePickerList>
+      </TimePicker>
+    )
+  }
+
+  const TimePickerModalComponent = () => {
+    return (
+      <TimePickerModal>
+        <HeaderContainer>
+          <X onClick={() => setSelectedDate(null)} />
+          <HeaderModalContent>
+            {weekDay} <span>{describedDate}</span>
+          </HeaderModalContent>
+        </HeaderContainer>
+        <TimePickerList>
+          {availability?.possibleTimes.map((hour) => (
+            <TimePickerItem
+              key={hour}
+              onClick={() => handleSelectTime(hour)}
+              disabled={!availability.availableTimes.includes(hour)}
+            >
+              {String(hour).padStart(2, '0')}:00h
+            </TimePickerItem>
+          ))}
+        </TimePickerList>
+      </TimePickerModal>
+    )
+  }
+
   return (
     <Container isTimePickerOpen={isDateSelected}>
       <Calendar onDateSelected={setSelectedDate} selectedDate={selectedDate} />
       {isDateSelected ? (
-        <TimePicker>
-          <TimePickerHeader>
-            {weekDay} <span>{describedDate}</span>
-          </TimePickerHeader>
-          <TimePickerList>
-            {availability?.possibleTimes.map((hour) => (
-              <TimePickerItem
-                key={hour}
-                onClick={() => handleSelectTime(hour)}
-                disabled={!availability.availableTimes.includes(hour)}
-              >
-                {String(hour).padStart(2, '0')}:00h
-              </TimePickerItem>
-            ))}
-          </TimePickerList>
-        </TimePicker>
+        width >= 680 ? (
+          <TimePickerComponent />
+        ) : (
+          <Modal>
+            <TimePickerModalComponent />
+          </Modal>
+        )
       ) : null}
     </Container>
   )

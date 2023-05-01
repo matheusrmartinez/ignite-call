@@ -37,6 +37,10 @@ export const IntervalInputs = styled('div', {
   'input::-webkit-calendar-picker-indicator': {
     filter: 'invert(100%) brightness(40%)',
   },
+
+  '@media (max-width:446px)': {
+    flexDirection: 'column',
+  },
 })
 
 export const FormError = styled(Text, {
