@@ -38,7 +38,7 @@ export default async function handler(
 
   if (schedulingDate.isBefore(new Date())) {
     return res.status(400).json({
-      message: 'Date is in the past',
+      message: 'Data está no passado.',
     })
   }
 
@@ -51,8 +51,7 @@ export default async function handler(
 
   if (conflictingScheduling) {
     return res.status(400).json({
-      message:
-        'There is another scheduling for the same selected date and hour',
+      message: 'Já existe um agendamento marcado para o dia/horário escolhido.',
     })
   }
 
@@ -66,34 +65,53 @@ export default async function handler(
     },
   })
 
-  const calendar = google.calendar({
-    version: 'v3',
-    auth: await getGoogleOAuthToken(user.id),
-  })
+  let calendar
 
-  await calendar.events.insert({
-    calendarId: 'primary',
-    conferenceDataVersion: 1,
-    requestBody: {
-      summary: `Ignite Call: ${name}`,
-      description: remarks,
-      start: {
-        dateTime: schedulingDate.format(),
-      },
-      end: {
-        dateTime: schedulingDate.add(1, 'hour').format(),
-      },
-      attendees: [{ email, displayName: name }],
-      conferenceData: {
-        createRequest: {
-          requestId: scheduling.id,
-          conferenceSolutionKey: {
-            type: 'hangoutsMeet',
+  try {
+    calendar = google.calendar({
+      version: 'v3',
+      auth: await getGoogleOAuthToken(user.id),
+    })
+  } catch (error) {
+    console.log('Failed to fetch refresh token')
+    res.status(400).json({
+      message: 'Failed to fetch refresh token',
+    })
+  }
+
+  if (!calendar) return
+
+  try {
+    await calendar.events.insert({
+      calendarId: 'primary',
+      conferenceDataVersion: 1,
+      requestBody: {
+        summary: `Ignite Call: ${name}`,
+        description: remarks,
+        start: {
+          dateTime: schedulingDate.format(),
+        },
+        end: {
+          dateTime: schedulingDate.add(1, 'hour').format(),
+        },
+        attendees: [{ email, displayName: name }],
+        conferenceData: {
+          createRequest: {
+            requestId: scheduling.id,
+            conferenceSolutionKey: {
+              type: 'hangoutsMeet',
+            },
           },
         },
       },
-    },
-  })
+    })
+  } catch (error) {
+    res.status(400).json({
+      message: 'Falha ao inserir o novo evento no google calendar.',
+    })
+  }
 
-  return res.status(201).end()
+  return res.status(401).json({
+    message: 'teste mensagem erro',
+  })
 }

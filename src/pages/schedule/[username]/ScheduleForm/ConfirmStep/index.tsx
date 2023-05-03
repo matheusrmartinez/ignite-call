@@ -10,6 +10,7 @@ import { api } from '@/lib/axios'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { useState } from 'react'
+import { confirmScheduling } from '@/service/schedulling'
 
 const confirmFormSchema = z.object({
   name: z
@@ -34,26 +35,42 @@ export const ConfirmStep = ({
   const username = String(router.query.username)
   const [isFetchingData, setIsFetchingData] = useState<boolean>(false)
 
+  const errorsStatus = [400, 401, 404, 500]
+
   const handleConfirmScheduling = async (data: ConfirmFormData) => {
     const { name, email, remarks } = data
     setIsFetchingData(true)
 
-    try {
-      await setTimeout(() => {
-        api.post(`/users/${username}/schedule`, {
-          name,
-          email,
-          remarks,
-          date: schedulingDate,
+    const schedulingResponse = confirmScheduling({
+      email,
+      name,
+      remarks: remarks || '',
+      schedulingDate,
+      username,
+    })
+
+    schedulingResponse.then((response) => {
+        if (errorsStatus.includes(response.status)) {
+          const { message } = response.data
+          console.error(message)
+        }
+      })
+      .catch(({ response }) => {
+        const { message } = response.data
+        return toast.error(`Falha ao realizar o agendamento. ${message}`, {
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: 'dark',
+          autoClose: 3000,
         })
+      })
+      .finally(() => {
         onCancelOrConfirmClick()
         setIsFetchingData(false)
-      }, 4000)
-    } catch (error: unknown) {
-      console.error(`Failed to create a new schedule. ${error}`)
-    }
+      })
   }
-
   const {
     register,
     handleSubmit,
@@ -61,22 +78,6 @@ export const ConfirmStep = ({
   } = useForm<ConfirmFormData>({
     resolver: zodResolver(confirmFormSchema),
   })
-
-  const handleNotify = () => {
-    if (
-      !(errors?.name || errors?.email || errors?.remarks) &&
-      (isSubmitted || isValid)
-    ) {
-      toast.success('Agendamento realizado com sucesso!', {
-        closeOnClick: true,
-        pauseOnHover: false,
-        draggable: true,
-        progress: undefined,
-        theme: 'dark',
-        autoClose: 3000,
-      })
-    }
-  }
 
   const describedDate = dayjs(schedulingDate).format('DD [ de ]MMMM[ de ]YYYY')
   const describedTime = dayjs(schedulingDate).format('HH:mm[h]')
@@ -124,11 +125,7 @@ export const ConfirmStep = ({
         >
           Cancelar
         </Button>
-        <Button
-          disabled={isSubmitting || isFetchingData}
-          onClick={() => handleNotify()}
-          type="submit"
-        >
+        <Button disabled={isSubmitting || isFetchingData} type="submit">
           Confirmar
         </Button>
       </FormActions>
