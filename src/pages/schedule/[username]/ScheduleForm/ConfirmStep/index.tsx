@@ -49,7 +49,8 @@ export const ConfirmStep = ({
       username,
     })
 
-    schedulingResponse.then((response) => {
+    schedulingResponse
+      .then((response) => {
         if (errorsStatus.includes(response.status)) {
           const { message } = response.data
           console.error(message)

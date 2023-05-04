@@ -14,6 +14,7 @@ import { useQuery } from '@tanstack/react-query'
 import { BlockedDates } from '@/interfaces/blocked-dates'
 import { useRouter } from 'next/router'
 import { getBlockedDates } from '@/service/blocked-date'
+import { CalendarSkeleton } from '../CalendarSkeleton'
 
 interface CalendarWeek {
   week: number
@@ -53,7 +54,7 @@ export const Calendar = ({ selectedDate, onDateSelected }: CalendarProps) => {
 
   const { username } = router.query
 
-  const { data: blockedDates } = useQuery<BlockedDates>(
+  const { data: blockedDates, isLoading } = useQuery<BlockedDates>(
     ['blocked-dates', currentDate.get('year'), currentDate.get('month')],
     async () => {
       const blockedDates = await getBlockedDates({
@@ -132,7 +133,9 @@ export const Calendar = ({ selectedDate, onDateSelected }: CalendarProps) => {
     return calendarWeeks
   }, [currentDate, blockedDates])
 
-  return (
+  return !isLoading ? (
+    <CalendarSkeleton />
+  ) : (
     <CalendarContainer>
       <CalendarHeader>
         <CalendarTitle>
