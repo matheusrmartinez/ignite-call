@@ -111,7 +111,5 @@ export default async function handler(
     })
   }
 
-  return res.status(401).json({
-    message: 'teste mensagem erro',
-  })
+  return res.status(201).end()
 }

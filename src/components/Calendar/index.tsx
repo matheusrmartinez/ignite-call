@@ -133,7 +133,7 @@ export const Calendar = ({ selectedDate, onDateSelected }: CalendarProps) => {
     return calendarWeeks
   }, [currentDate, blockedDates])
 
-  return !isLoading ? (
+  return isLoading ? (
     <CalendarSkeleton />
   ) : (
     <CalendarContainer>

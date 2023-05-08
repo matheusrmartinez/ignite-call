@@ -73,10 +73,10 @@ export const CalendarBody = styled('table', {
 })
 const skeletonLoading = keyframes({
   '0%': {
-    backgroundColor: 'hsl(206,12%,35%)',
+    backgroundColor: 'hsl(206,1%,15%, 1)',
   },
   '100%': {
-    backgroundColor: 'hsl(206,10%,50%)',
+    backgroundColor: 'hsl(206,1%,20%, 1)',
   },
 })
 

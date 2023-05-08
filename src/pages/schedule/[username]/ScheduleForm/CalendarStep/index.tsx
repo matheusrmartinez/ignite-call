@@ -18,6 +18,7 @@ import {
 import { useWindowSize } from '@/hooks/useWindowSize'
 import { Modal } from '@/components/Modal'
 import { X } from 'phosphor-react'
+import { TimeListSkeleton } from '@/components/TimeListSkeleton'
 
 interface CalendarStepProps {
   onSelectDateTime: (date: Date) => void
@@ -41,7 +42,7 @@ export const CalendarStep = ({ onSelectDateTime }: CalendarStepProps) => {
     ? dayjs(selectedDate).format('YYYY-MM-DD')
     : null
 
-  const { data: availability } = useQuery<Availability>(
+  const { data: availability, isLoading } = useQuery<Availability>(
     ['availability', selectedDateWithoutTime],
     async () => {
       const availability = await getAvailability({
@@ -68,22 +69,28 @@ export const CalendarStep = ({ onSelectDateTime }: CalendarStepProps) => {
   const { width } = useWindowSize()
 
   const TimePickerComponent = () => {
+    if (!availability) return <></>
+
     return (
       <TimePicker>
         <TimePickerHeader>
           {weekDay} <span>{describedDate}</span>
         </TimePickerHeader>
-        <TimePickerList>
-          {availability?.possibleTimes.map((hour) => (
-            <TimePickerItem
-              key={hour}
-              onClick={() => handleSelectTime(hour)}
-              disabled={!availability.availableTimes.includes(hour)}
-            >
-              {String(hour).padStart(2, '0')}:00h
-            </TimePickerItem>
-          ))}
-        </TimePickerList>
+        {isLoading ? (
+          <TimeListSkeleton />
+        ) : (
+          <TimePickerList>
+            {availability.possibleTimes.map((hour) => (
+              <TimePickerItem
+                key={hour}
+                onClick={() => handleSelectTime(hour)}
+                disabled={!availability.availableTimes.includes(hour)}
+              >
+                {String(hour).padStart(2, '0')}:00h
+              </TimePickerItem>
+            ))}
+          </TimePickerList>
+        )}
       </TimePicker>
     )
   }
@@ -97,17 +104,21 @@ export const CalendarStep = ({ onSelectDateTime }: CalendarStepProps) => {
             {weekDay} <span>{describedDate}</span>
           </HeaderModalContent>
         </HeaderContainer>
-        <TimePickerList>
-          {availability?.possibleTimes.map((hour) => (
-            <TimePickerItem
-              key={hour}
-              onClick={() => handleSelectTime(hour)}
-              disabled={!availability.availableTimes.includes(hour)}
-            >
-              {String(hour).padStart(2, '0')}:00h
-            </TimePickerItem>
-          ))}
-        </TimePickerList>
+        {isLoading ? (
+          <TimeListSkeleton />
+        ) : (
+          <TimePickerList>
+            {availability?.possibleTimes.map((hour) => (
+              <TimePickerItem
+                key={hour}
+                onClick={() => handleSelectTime(hour)}
+                disabled={!availability.availableTimes.includes(hour)}
+              >
+                {String(hour).padStart(2, '0')}:00h
+              </TimePickerItem>
+            ))}
+          </TimePickerList>
+        )}
       </TimePickerModal>
     )
   }

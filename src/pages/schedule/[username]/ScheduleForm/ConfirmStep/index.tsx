@@ -1,16 +1,16 @@
 import { Button, Text, TextArea, TextInput } from '@ignite-ui/react'
 import { ConfirmForm, FormActions, FormError, FormHeader } from './styles'
-import { CalendarBlank, Clock } from 'phosphor-react'
+import { CalendarBlank, Check, Clock } from 'phosphor-react'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
-import { api } from '@/lib/axios'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { useState } from 'react'
 import { confirmScheduling } from '@/service/schedulling'
+import { Spinner } from '@/components/Spinner'
 
 const confirmFormSchema = z.object({
   name: z
@@ -34,6 +34,7 @@ export const ConfirmStep = ({
   const router = useRouter()
   const username = String(router.query.username)
   const [isFetchingData, setIsFetchingData] = useState<boolean>(false)
+  const [successfullyFetchData, setSuccessfullyFetchData] = useState(false)
 
   const errorsStatus = [400, 401, 404, 500]
 
@@ -55,19 +56,15 @@ export const ConfirmStep = ({
           const { message } = response.data
           console.error(message)
         }
+        setIsFetchingData(false)
+        setSuccessfullyFetchData(true)
+        setTimeout(() => {
+          onCancelOrConfirmClick()
+        }, 3000)
       })
       .catch(({ response }) => {
         const { message } = response.data
-        return toast.error(`Falha ao realizar o agendamento. ${message}`, {
-          closeOnClick: true,
-          pauseOnHover: false,
-          draggable: true,
-          progress: undefined,
-          theme: 'dark',
-          autoClose: 3000,
-        })
-      })
-      .finally(() => {
+        alert(message)
         onCancelOrConfirmClick()
         setIsFetchingData(false)
       })
@@ -75,7 +72,7 @@ export const ConfirmStep = ({
   const {
     register,
     handleSubmit,
-    formState: { isSubmitting, errors, isValid, isSubmitted },
+    formState: { isSubmitting, errors },
   } = useForm<ConfirmFormData>({
     resolver: zodResolver(confirmFormSchema),
   })
@@ -126,9 +123,17 @@ export const ConfirmStep = ({
         >
           Cancelar
         </Button>
-        <Button disabled={isSubmitting || isFetchingData} type="submit">
-          Confirmar
-        </Button>
+        {isSubmitting || isFetchingData ? (
+          <Button aria-disabled type="submit">
+            <Spinner />
+          </Button>
+        ) : successfullyFetchData ? (
+          <Button disabled type="button">
+            <Check />
+          </Button>
+        ) : (
+          <Button type="submit">Confirmar</Button>
+        )}
       </FormActions>
       <ToastContainer />
     </ConfirmForm>
