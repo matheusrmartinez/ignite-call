@@ -31,7 +31,7 @@ interface CalendarProps {
   onDateSelected: (date: Date) => void
 }
 
-export const Calendar = ({ selectedDate, onDateSelected }: CalendarProps) => {
+export const Calendar = ({ onDateSelected }: CalendarProps) => {
   const weekDays = getWeekDays({ short: true })
   const router = useRouter()
 
@@ -136,7 +136,7 @@ export const Calendar = ({ selectedDate, onDateSelected }: CalendarProps) => {
   return isLoading ? (
     <CalendarSkeleton />
   ) : (
-    <CalendarContainer>
+    <CalendarContainer data-testid="calendar-container">
       <CalendarHeader>
         <CalendarTitle>
           {currentMonth} <span>{currentYear}</span>
